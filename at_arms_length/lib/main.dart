@@ -1,3 +1,5 @@
+import 'package:at_arms_length/components/_pin.dart';
+import 'package:at_arms_length/models/pinned.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -13,12 +15,11 @@ class MyApp extends StatelessWidget {
     const colourScheme = {
       'bg': Color.fromARGB(1, 29, 27, 34),
       'text': Color.fromARGB(1, 240, 241, 249),
-      'card': Color.fromARGB(1, 39, 36, 46),
-      'error': Color.fromARGB(1, 146, 20, 12),
+      'card': Color.fromARGB(1, 97, 70, 160),
       'accent': Color.fromARGB(1, 48, 107, 172)
     };
 
-    var app = MaterialApp(
+    return MaterialApp(
       title: 'At Arm\'s Length',
       theme: ThemeData(
         useMaterial3: true,
@@ -34,8 +35,6 @@ class MyApp extends StatelessWidget {
       ),
       home: const MyHomePage(title: 'Home'),
     );
-
-    return app;
   }
 }
 
@@ -59,6 +58,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  List<Pinned> pins = [
+    Pinned(
+        type: PinType.comment,
+        text: 'That video was really cool!',
+        date: DateTime.now()),
+    Pinned(
+        type: PinType.comment,
+        text: 'That video was really cool!',
+        date: DateTime.now()),
+    Pinned(
+        type: PinType.link,
+        text: 'That video was really cool!',
+        date: DateTime.now()),
+  ];
 
   void _incrementCounter() {
     setState(() {
@@ -69,6 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  Widget pinTemplate(pinned) {
+    return Pin(pinned: pinned);
   }
 
   @override
@@ -105,17 +122,17 @@ class _MyHomePageState extends State<MyHomePage> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: Center(
-                    child: Container(
-                      color: Colors.blueAccent,
-                    ),
-                  ),
+                  child: Container(
+                      color: Theme.of(context).colorScheme.primary,
+                      child: ListView(
+                        children: pins.map((pin) => pinTemplate(pin)).toList(),
+                      )),
                 ),
                 Expanded(
-                  child: Container(
-                    color: Colors.lightBlue,
-                  ),
                   flex: 5,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.background,
+                  ),
                 )
               ],
             ),
@@ -123,40 +140,11 @@ class _MyHomePageState extends State<MyHomePage> {
           Expanded(
               flex: 1,
               child: Container(
-                color: Colors.red,
+                color: Theme.of(context).colorScheme.background,
               ))
         ],
       ),
-      // Center(
-      //   // Center is a layout widget. It takes a single child and positions it
-      //   // in the middle of the parent.
-      //   child:
-      //   Column(
-      //     // Column is also a layout widget. It takes a list of children and
-      //     // arranges them vertically. By default, it sizes itself to fit its
-      //     // children horizontally, and tries to be as tall as its parent.
-      //     //
-      //     // Column has various properties to control how it sizes itself and
-      //     // how it positions its children. Here we use mainAxisAlignment to
-      //     // center the children vertically; the main axis here is the vertical
-      //     // axis because Columns are vertical (the cross axis would be
-      //     // horizontal).
-      //     //
-      //     // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-      //     // action in the IDE, or press "p" in the console), to see the
-      //     // wireframe for each widget.w
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       const Text(
-      //         'You have pushed the button this many times:',
-      //       ),
-      //       Text(
-      //         '$_counter',
-      //         style: Theme.of(context).textTheme.headlineMedium,
-      //       ),
-      //     ],
-      //   ),
-      // ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
